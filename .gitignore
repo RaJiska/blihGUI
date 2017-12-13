@@ -30,3 +30,7 @@
 *.exe
 *.out
 *.app
+blihGUI
+
+# VSC Personal files
+.vscode
