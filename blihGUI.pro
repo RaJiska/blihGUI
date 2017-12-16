@@ -1,9 +1,13 @@
+# TODO: Clean Lib
+
 QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = blihGUI
 TEMPLATE = app
+
+QMAKE_CXXFLAGS += -std=c++11 -g3
 
 LIBS = -lcurl -lcrypto
 
@@ -27,3 +31,11 @@ HEADERS += \
 		include/BlihGUI.hpp \
 		include/BlihAPI.hpp \
 		include/Credentials.hpp
+
+
+# Lib JSON
+libJSON.target = libJSON
+libJSON.commands = cp lib/json/json.hpp include/json.hpp
+
+PRE_TARGETDEPS += libJSON
+QMAKE_EXTRA_TARGETS += libJSON
