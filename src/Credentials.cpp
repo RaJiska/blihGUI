@@ -20,6 +20,8 @@ Credentials::~Credentials(void)
 
 }
 
+/* --------------- PUBLIC --------------- */
+
 /* TODO: Handle when file exists but not readable */
 bool Credentials::readFromConfig(void)
 {
@@ -49,8 +51,9 @@ bool Credentials::writeToConfig(void)
 	try
 	{
 		ofs.open(CONFIG_FILE, ios::out | ios::binary);
-		ofs.write(this->login.c_str(), this->login.length() + 1);
-		ofs.write((char *) this->password, SHA512_DIGEST_LENGTH);
+		ofs.write(this->login.c_str(), this->login.length());
+		ofs.put((char) 0);
+		ofs.write((char *) this->passwordDigest, SHA512_DIGEST_LENGTH);
 		ofs.close();
 	}
 	catch (...)
@@ -59,6 +62,8 @@ bool Credentials::writeToConfig(void)
 	}
 	return true;
 }
+
+/* --------------- PRIVATE --------------- */
 
 std::string Credentials::getLogin(void)
 {

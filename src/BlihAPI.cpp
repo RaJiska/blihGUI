@@ -111,8 +111,8 @@ std::string BlihAPI::formatData(const json &data)
 
 static size_t requestCallback(void *contents, size_t size, size_t nmemb, void *userp)
 {
-    ((std::string *) userp)->append((char *) contents, size * nmemb);
-    return size * nmemb;
+	((std::string *) userp)->append((char *) contents, size * nmemb);
+	return size * nmemb;
 }
 
 json BlihAPI::sendRequest(const json &data)
@@ -127,8 +127,8 @@ json BlihAPI::sendRequest(const json &data)
 	curl_easy_setopt(this->curl, CURLOPT_NOPROGRESS, 1L);
 	curl_easy_setopt(this->curl, CURLOPT_HTTPHEADER, this->curl_header);
 	curl_easy_setopt(this->curl, CURLOPT_POSTFIELDS, str_data.c_str());
-	curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, requestCallback);
-    curl_easy_setopt(curl, CURLOPT_WRITEDATA, &raw_response);
+	curl_easy_setopt(this->curl, CURLOPT_WRITEFUNCTION, requestCallback);
+	curl_easy_setopt(this->curl, CURLOPT_WRITEDATA, &raw_response);
 	code = curl_easy_perform(this->curl);
 	response = (code != CURLE_OK) ? json(json::value_t::null) : this->retrieveResponse(raw_response);
 	curl_easy_reset(this->curl);
