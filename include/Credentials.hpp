@@ -1,6 +1,8 @@
+#pragma once
+
 #include <openssl/sha.h>
 
-#include "include/BlihAPI.hpp"
+#include "include/BlihGUI.hpp"
 
 using namespace std;
 
@@ -13,8 +15,12 @@ class Credentials
 
 	bool readFromConfig(void);
 	bool writeToConfig(void);
+	std::string getLogin(void);
+	char *getPassword(void);
+	unsigned char *getPasswordDigest(void);
 
 	private:
 	std::string login;
-	unsigned char password[SHA512_DIGEST_LENGTH];
+	unsigned char passwordDigest[SHA512_DIGEST_LENGTH];
+	char password[SHA512_DIGEST_LENGTH * 2];
 };
