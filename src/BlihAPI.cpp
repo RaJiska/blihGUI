@@ -34,7 +34,7 @@ bool BlihAPI::checkCredentials(void)
 	return (response["_STATUS_CODE"] == "200");
 }
 
-json BlihAPI::repositoryCreate(std::string &name)
+json BlihAPI::repositoryCreate(const std::string &name)
 {
 	json data;
 
@@ -52,21 +52,24 @@ json BlihAPI::repositoryList(void)
 	return this->sendRequest();
 }
 
-json BlihAPI::repositoryDelete(std::string &name)
+json BlihAPI::repositoryDelete(const std::string &name)
 {
 	this->curl_url = (BLIHAPI_ADDRESS + "repository/" + name);
 	curl_easy_setopt(this->curl, CURLOPT_CUSTOMREQUEST, "DELETE");
 	return this->sendRequest();
 }
 
-json BlihAPI::repositoryInfo(std::string &name)
+json BlihAPI::repositoryInfo(const std::string &name)
 {
 	this->curl_url = (BLIHAPI_ADDRESS + "repository/" + name);
 	curl_easy_setopt(this->curl, CURLOPT_CUSTOMREQUEST, "GET");
 	return this->sendRequest();
 }
 
-json BlihAPI::repositorySetAcl(std::string &name, std::string &user, std::string &acls)
+json BlihAPI::repositorySetAcl(
+	const std::string &name,
+	const std::string &user,
+	const std::string &acls)
 {
 	json data;
 
@@ -77,7 +80,7 @@ json BlihAPI::repositorySetAcl(std::string &name, std::string &user, std::string
 	return this->sendRequest(data);
 }
 
-json BlihAPI::repositoryGetAcl(std::string &name)
+json BlihAPI::repositoryGetAcl(const std::string &name)
 {
 	this->curl_url = (BLIHAPI_ADDRESS + "repository/" + name + "/acls");
 	curl_easy_setopt(this->curl, CURLOPT_CUSTOMREQUEST, "GET");

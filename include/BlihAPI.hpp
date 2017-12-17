@@ -13,12 +13,12 @@ class BlihAPI
 	~BlihAPI(void);
 
 	bool checkCredentials(void);
-	json repositoryCreate(std::string &name);
-	json repositoryDelete(std::string &name);
+	json repositoryCreate(const std::string &name);
+	json repositoryDelete(const std::string &name);
 	json repositoryList(void);
-	json repositoryInfo(std::string &name);
-	json repositorySetAcl(std::string &name, std::string &user, std::string &acls);
-	json repositoryGetAcl(std::string &name);
+	json repositoryInfo(const std::string &name);
+	json repositorySetAcl(const std::string &name, const std::string &user, const std::string &acls);
+	json repositoryGetAcl(const std::string &name);
 	void setCredentials(const Credentials &crd);
 
 	private:

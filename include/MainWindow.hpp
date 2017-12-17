@@ -13,10 +13,13 @@
 #include <QCheckBox>
 #include <QDateEdit>
 #include <QLabel>
-#include <QListView>
+#include <QListWidget>
+#include <QMessageBox>
+#include <map>
 
 #include "include/BlihGUI.hpp"
 #include "include/BlihAPI.hpp"
+#include "include/Repository.hpp"
 
 class MainWindow : public QMainWindow
 {
@@ -24,8 +27,16 @@ class MainWindow : public QMainWindow
 	MainWindow(void);
 	~MainWindow(void);
 
+	void connectToBlih(void);
+	void repositoryAdd(const std::string &name);
+	void repositoryGetInfos(const std::string &name);
+
 	private:
+	bool handleBlihError(const json &response);
+	void repositoriesList(const json &response);
+
 	BlihAPI blih;
+	std::map<std::string, Repository> repo_list;
 
 	/* Design */
 	QWidget widget_central;
@@ -44,8 +55,8 @@ class MainWindow : public QMainWindow
 	/* Repositories */
 	QGroupBox gbox_repositories;
 	QVBoxLayout layout_repositories;
-	QVBoxLayout layout_repolv;
-	QListView lv_repositories;
+	QVBoxLayout layout_repolw;
+	QListWidget lw_repositories;
 	QHBoxLayout layout_repobtns;
 	QPushButton btn_repoadd;
 	QPushButton btn_repodel;
