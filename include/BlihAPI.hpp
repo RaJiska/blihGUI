@@ -9,15 +9,17 @@
 class BlihAPI
 {
 	public:
-	BlihAPI(Credentials &crd);
+	BlihAPI(void);
 	~BlihAPI(void);
 
+	bool checkCredentials(void);
 	json repositoryCreate(std::string &name);
 	json repositoryDelete(std::string &name);
 	json repositoryList(void);
 	json repositoryInfo(std::string &name);
 	json repositorySetAcl(std::string &name, std::string &user, std::string &acls);
 	json repositoryGetAcl(std::string &name);
+	void setCredentials(const Credentials &crd);
 
 	private:
 	bool computeSignature(char *result, const char *key, const char *msg);

@@ -1,6 +1,6 @@
 #include "include/BlihAPI.hpp"
 
-BlihAPI::BlihAPI(Credentials &crd)
+BlihAPI::BlihAPI()
 {
 	this->curl_header = NULL;
 	this->curl = curl_easy_init();
@@ -13,7 +13,6 @@ BlihAPI::BlihAPI(Credentials &crd)
 			("User-Agent: " + BLIHGUI_WHOAMI).c_str()))
 		))
 		throw std::bad_alloc();
-	this->crd = crd;
 }
 
 BlihAPI::~BlihAPI(void)
@@ -23,6 +22,17 @@ BlihAPI::~BlihAPI(void)
 }
 
 /* --------------- PUBLIC --------------- */
+
+bool BlihAPI::checkCredentials(void)
+{
+	json response;
+
+	this->curl_url = (BLIHAPI_ADDRESS + "repositories");
+	curl_easy_setopt(this->curl, CURLOPT_CUSTOMREQUEST, "GET");
+	if ((response = this->sendRequest()) == nullptr)
+		return false;
+	return (response["_STATUS_CODE"] == "200");
+}
 
 json BlihAPI::repositoryCreate(std::string &name)
 {
@@ -72,6 +82,11 @@ json BlihAPI::repositoryGetAcl(std::string &name)
 	this->curl_url = (BLIHAPI_ADDRESS + "repository/" + name + "/acls");
 	curl_easy_setopt(this->curl, CURLOPT_CUSTOMREQUEST, "GET");
 	return this->sendRequest();
+}
+
+void BlihAPI::setCredentials(const Credentials &crd)
+{
+	this->crd = crd;
 }
 
 /* --------------- PRIVATE --------------- */

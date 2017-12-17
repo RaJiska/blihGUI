@@ -5,7 +5,7 @@ Credentials::Credentials(void)
 
 }
 
-Credentials::Credentials(std::string login, std::string password)
+Credentials::Credentials(const std::string &login, const std::string &password)
 {
 	unsigned int it;
 
@@ -63,6 +63,36 @@ bool Credentials::writeToConfig(void)
 	return true;
 }
 
+void Credentials::setLogin(const std::string &login)
+{
+	this->login = login;
+}
+
+void Credentials::setPassword(const std::string &password)
+{
+	unsigned int it;
+
+	SHA512((unsigned char *) password.c_str(), password.length(), this->passwordDigest);
+	for (it = 0; it < SHA512_DIGEST_LENGTH; it++)
+		sprintf(&this->password[it * 2], "%02x", (unsigned int) this->passwordDigest[it]);
+}
+
+/* --------------- OPERATORS --------------- */
+
+bool Credentials::operatorEqual(const Credentials &crd2) const
+{
+	unsigned int it;
+
+	if (this->login != crd2.login)
+		return false;
+	for (it = 0; it < SHA512_DIGEST_LENGTH; it++)
+	{
+		if (this->passwordDigest[it] != crd2.passwordDigest[it])
+			return false;
+	}
+	return true;
+}
+
 /* --------------- PRIVATE --------------- */
 
 std::string Credentials::getLogin(void)
@@ -78,4 +108,14 @@ char *Credentials::getPassword(void)
 unsigned char *Credentials::getPasswordDigest(void)
 {
 	return this->passwordDigest;
+}
+
+bool operator==(const Credentials &crd1, const Credentials &crd2)
+{
+	return crd1.operatorEqual(crd2);
+}
+
+bool operator!=(const Credentials &crd1, const Credentials &crd2)
+{
+	return !crd1.operatorEqual(crd2);
 }

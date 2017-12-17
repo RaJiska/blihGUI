@@ -25,12 +25,14 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
 		src/main.cpp \
 		src/BlihAPI.cpp \
-		src/Credentials.cpp
+		src/Credentials.cpp \
+		src/MainWindow.cpp
 
 HEADERS += \
 		include/BlihGUI.hpp \
 		include/BlihAPI.hpp \
-		include/Credentials.hpp
+		include/Credentials.hpp \
+		include/MainWindow.hpp
 
 
 # Lib JSON

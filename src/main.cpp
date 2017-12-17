@@ -1,9 +1,10 @@
 #include <QApplication>
 
 #include "include/BlihGUI.hpp"
-#include "include/BlihAPI.hpp"
-#include "include/Credentials.hpp"
+#include "include/MainWindow.hpp"
 
+#include "include/Credentials.hpp"
+#include "include/BlihAPI.hpp"
 
 const std::string BLIHGUI_WHOAMI = "blihGUI";
 const std::string BLIHAPI_ADDRESS = "https://blih.epitech.eu/";
@@ -23,6 +24,8 @@ int main(int argc, char **argv)
 		return EXIT_FAILURE;
 	}
 	QApplication app(argc, argv);
+	MainWindow w;
+	w.show();
 	ret = app.exec();
 	curl_global_cleanup();
 	return ret;
