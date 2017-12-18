@@ -57,6 +57,7 @@ MainWindow::MainWindow(void)
 	QObject::connect(&this->btn_repoadd, SIGNAL(clicked()), this, SLOT(repositoryAdd()));
 	QObject::connect(&this->btn_repodel, SIGNAL(clicked()), this, SLOT(repositoryDelete()));
 	QObject::connect(&this->btn_repoinfo, SIGNAL(clicked()), this, SLOT(repositoryInfo()));
+	QObject::connect(&this->lw_repositories, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(repositoryInfo()));
 	QObject::connect(&this->lw_repositories, SIGNAL(itemSelectionChanged()), this, SLOT(repositoryItemSelected()));
 }
 
