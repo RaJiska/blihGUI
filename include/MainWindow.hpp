@@ -16,27 +16,39 @@
 #include <QListWidget>
 #include <QMessageBox>
 #include <map>
+#include <thread>
 
 #include "include/BlihGUI.hpp"
 #include "include/BlihAPI.hpp"
 #include "include/Repository.hpp"
+#include "include/RepoAddWindow.hpp"
 
 class MainWindow : public QMainWindow
 {
+	Q_OBJECT
+
 	public:
 	MainWindow(void);
 	~MainWindow(void);
 
+	public slots:
+	void loginChanged(QString str);
 	void connectToBlih(void);
-	void repositoryAdd(const std::string &name);
+	void repositoryItemSelected(void);
+	void repositoryAdd(void);
+	void repositoryDelete(void);
 	void repositoryGetInfos(const std::string &name);
 
 	private:
+	void cachedCredentialsAreValid(void);
 	bool handleBlihError(const json &response);
-	void repositoriesList(const json &response);
+	void actionRepositoryAdd(const QString &name);
+	void actionRepositoryList(const json &response);
+	void actionRepositoryDelete(const QString &name);
 
 	BlihAPI blih;
 	std::map<std::string, Repository> repo_list;
+	QString cached_login;
 
 	/* Design */
 	QWidget widget_central;

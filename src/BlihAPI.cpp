@@ -92,6 +92,11 @@ void BlihAPI::setCredentials(const Credentials &crd)
 	this->crd = crd;
 }
 
+Credentials BlihAPI::getCredentials(void)
+{
+	return this->crd;
+}
+
 /* --------------- PRIVATE --------------- */
 
 bool BlihAPI::computeSignature(char *sig, const char *key, const char *msg)

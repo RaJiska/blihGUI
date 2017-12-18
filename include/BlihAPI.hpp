@@ -20,6 +20,7 @@ class BlihAPI
 	json repositorySetAcl(const std::string &name, const std::string &user, const std::string &acls);
 	json repositoryGetAcl(const std::string &name);
 	void setCredentials(const Credentials &crd);
+	Credentials getCredentials(void);
 
 	private:
 	bool computeSignature(char *result, const char *key, const char *msg);
