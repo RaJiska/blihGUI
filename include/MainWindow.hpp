@@ -20,8 +20,8 @@
 
 #include "include/BlihGUI.hpp"
 #include "include/BlihAPI.hpp"
-#include "include/Repository.hpp"
 #include "include/RepoAddWindow.hpp"
+#include "include/RepoInfoWindow.hpp"
 
 class MainWindow : public QMainWindow
 {
@@ -37,7 +37,7 @@ class MainWindow : public QMainWindow
 	void repositoryItemSelected(void);
 	void repositoryAdd(void);
 	void repositoryDelete(void);
-	void repositoryGetInfos(const std::string &name);
+	void repositoryInfo(void);
 
 	private:
 	void cachedCredentialsAreValid(void);
@@ -47,7 +47,6 @@ class MainWindow : public QMainWindow
 	void actionRepositoryDelete(const QString &name);
 
 	BlihAPI blih;
-	std::map<std::string, Repository> repo_list;
 	QString cached_login;
 
 	/* Design */

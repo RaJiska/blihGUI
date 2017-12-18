@@ -56,6 +56,7 @@ MainWindow::MainWindow(void)
 	QObject::connect(&this->btn_conconnection, SIGNAL(clicked()), this, SLOT(connectToBlih()));
 	QObject::connect(&this->btn_repoadd, SIGNAL(clicked()), this, SLOT(repositoryAdd()));
 	QObject::connect(&this->btn_repodel, SIGNAL(clicked()), this, SLOT(repositoryDelete()));
+	QObject::connect(&this->btn_repoinfo, SIGNAL(clicked()), this, SLOT(repositoryInfo()));
 	QObject::connect(&this->lw_repositories, SIGNAL(itemSelectionChanged()), this, SLOT(repositoryItemSelected()));
 }
 
@@ -85,7 +86,6 @@ void MainWindow::connectToBlih(void)
 	Credentials crd = this->blih.getCredentials();
 
 	this->lw_repositories.clear();
-	this->repo_list.clear();
 	this->le_conlogin.setDisabled(true);
 	this->le_conpassword.setDisabled(true);
 	this->chk_conremember.setDisabled(true);
@@ -144,21 +144,21 @@ void MainWindow::repositoryAdd(void)
 	this->btn_repoadd.setDisabled(false);
 }
 
-void MainWindow::repositoryGetInfos(const std::string &name)
+void MainWindow::repositoryInfo(void)
 {
-	json response;
+	json infoResponse;
+	json aclsResponse;
+	QList <QListWidgetItem *> list = this->lw_repositories.selectedItems();
+	std::string repo = list[0]->text().toUtf8().constData();
 
 	this->btn_repoinfo.setDisabled(true);
-	response = this->blih.repositoryInfo(name);
-	if (!this->handleBlihError(response))
+	infoResponse = this->blih.repositoryInfo(repo);
+	aclsResponse = this->blih.repositoryGetAcl(repo);
+	if (!this->handleBlihError(infoResponse) && !this->handleBlihError(aclsResponse))
 	{
-		this->repo_list[name].info_queried = true;
-		this->repo_list[name].creation = response["message"]["creation_time"].get<long>();
-		this->repo_list[name].description = response["message"]["description"];
-		this->repo_list[name].is_public = response["message"]["public"];
-		this->repo_list[name].url = response["message"]["url"];
-		this->repo_list[name].uuid = response["message"]["uuid"];
-		/* TODO: Display new window here */
+		aclsResponse.erase("_STATUS_CODE"); // GetACL JSON format is different
+		RepoInfoWindow w(infoResponse, aclsResponse, QString::fromStdString(repo), this);
+		w.exec();
 	}
 	this->btn_repoinfo.setDisabled(false);
 }
@@ -237,28 +237,20 @@ bool MainWindow::handleBlihError(const json &response)
 void MainWindow::actionRepositoryList(const json &response)
 {
 	this->lw_repositories.clear();
-	this->repo_list.clear();
 	this->repositoryItemSelected();
 	for (auto &it : json::iterator_wrapper(response["repositories"]))
-	{
-		Repository repo;
-		this->repo_list[it.key()] = repo;
 		this->lw_repositories.addItem(QString::fromStdString(it.key()));
-	}
 }
 
 void MainWindow::actionRepositoryDelete(const QString &name)
 {
 	QList <QListWidgetItem *> list;
 
-	this->repo_list.erase(name.toUtf8().constData());
 	list = this->lw_repositories.findItems(name, Qt::MatchExactly);
 	this->lw_repositories.takeItem(this->lw_repositories.row(list[0]));
 }
 
 void MainWindow::actionRepositoryAdd(const QString &name)
 {
-	Repository repo;
-	this->repo_list[name.toUtf8().constData()] = repo;
 	this->lw_repositories.addItem(name);
 }

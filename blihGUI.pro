@@ -26,17 +26,17 @@ SOURCES += \
 		src/main.cpp \
 		src/BlihAPI.cpp \
 		src/Credentials.cpp \
-		src/Repository.cpp \
 		src/MainWindow.cpp \
-		src/RepoAddWindow.cpp
+		src/RepoAddWindow.cpp \
+		src/RepoInfoWindow.cpp
 
 HEADERS += \
 		include/BlihGUI.hpp \
 		include/BlihAPI.hpp \
 		include/Credentials.hpp \
-		include/repository.hpp \
 		include/MainWindow.hpp \
-		include/RepoAddWindow.hpp
+		include/RepoAddWindow.hpp \
+		include/RepoInfoWindow.hpp
 
 
 # Lib JSON
