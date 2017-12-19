@@ -1,5 +1,7 @@
 #include "include/MainWindow.hpp"
  
+ /* TODO: API Calls in thread */
+
 MainWindow::MainWindow(void)
 {
 	this->resize(800, 700);
@@ -138,11 +140,12 @@ void MainWindow::repositoryAdd(void)
 
 	this->btn_repoadd.setDisabled(true);
 	w.exec();
-	if (repo_name.trimmed().isEmpty())
-		return;
-	response = this->blih.repositoryCreate(repo_name.toUtf8().constData());
-	if (!this->handleBlihError(response))
-		this->lw_repositories.addItem(repo_name);
+	if (!repo_name.trimmed().isEmpty())
+	{
+		response = this->blih.repositoryCreate(repo_name.toUtf8().constData());
+		if (!this->handleBlihError(response))
+			this->lw_repositories.addItem(repo_name);
+	}
 	this->btn_repoadd.setDisabled(false);
 }
 

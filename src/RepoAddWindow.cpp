@@ -13,6 +13,8 @@ RepoAddWindow::RepoAddWindow(QString *str, QWidget *parent) : QDialog(parent)
 
 	this->layout_main.addLayout(&this->layout_input);
 	this->layout_main.addLayout(&this->layout_validate);
+
+	this->setMaximumHeight(this->height());
 	this->setLayout(&this->layout_main);
 
 	this->name_to_return = str;
