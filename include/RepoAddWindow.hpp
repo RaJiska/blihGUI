@@ -1,22 +1,11 @@
 #pragma once
 
-#include <QMainWindow>
-#include <QApplication>
+#include <QDialog>
 #include <QPushButton>
 #include <QLineEdit>
-#include <QFormLayout>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
-#include <QGroupBox>
-#include <QMdiArea>
-#include <QTextEdit>
-#include <QCheckBox>
-#include <QDateEdit>
 #include <QLabel>
-#include <QListWidget>
-#include <QMessageBox>
-#include <map>
-#include <thread>
 
 class RepoAddWindow : public QDialog
 {

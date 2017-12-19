@@ -1,23 +1,14 @@
-#include <QMainWindow>
-#include <QApplication>
 #include <QPushButton>
+#include <QDialog>
 #include <QLineEdit>
 #include <QFormLayout>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QGroupBox>
-#include <QMdiArea>
-#include <QTextEdit>
-#include <QCheckBox>
-#include <QDateEdit>
 #include <QLabel>
-#include <QListWidget>
-#include <QMessageBox>
-#include <map>
-#include <thread>
-#include <QFormLayout>
-#include <QTreeView>
 #include <QTreeWidget>
+
+#include <ctime>
 
 #include "include/BlihGUI.hpp"
 
@@ -26,12 +17,14 @@ class RepoInfoWindow : public QDialog
 	public:
 	RepoInfoWindow(
 		const json &infoData,
-		const json &aclsData,
+		const json *aclsData,
 		const QString &repo,
 		QWidget *parent);
 	~RepoInfoWindow(void);
 
 	private:
+	void setCreationTime(const json &infoData);
+
 	QVBoxLayout layout_main;
 
 	QGroupBox gbox_infos;

@@ -141,7 +141,7 @@ void MainWindow::repositoryAdd(void)
 		return;
 	response = this->blih.repositoryCreate(repo_name.toUtf8().constData());
 	if (!this->handleBlihError(response))
-		this->actionRepositoryAdd(repo_name);
+		this->lw_repositories.addItem(repo_name);
 	this->btn_repoadd.setDisabled(false);
 }
 
@@ -149,16 +149,18 @@ void MainWindow::repositoryInfo(void)
 {
 	json infoResponse;
 	json aclsResponse;
+	json *aclsResponsePtr;
 	QList <QListWidgetItem *> list = this->lw_repositories.selectedItems();
 	std::string repo = list[0]->text().toUtf8().constData();
 
 	this->btn_repoinfo.setDisabled(true);
 	infoResponse = this->blih.repositoryInfo(repo);
 	aclsResponse = this->blih.repositoryGetAcl(repo);
-	if (!this->handleBlihError(infoResponse) && !this->handleBlihError(aclsResponse))
+	aclsResponsePtr = this->handleBlihError(aclsResponse, true) ? NULL : &aclsResponse;
+	if (!this->handleBlihError(infoResponse))
 	{
 		aclsResponse.erase("_STATUS_CODE"); // GetACL JSON format is different
-		RepoInfoWindow w(infoResponse, aclsResponse, QString::fromStdString(repo), this);
+		RepoInfoWindow w(infoResponse, aclsResponsePtr, QString::fromStdString(repo), this);
 		w.exec();
 	}
 	this->btn_repoinfo.setDisabled(false);
@@ -218,10 +220,12 @@ void MainWindow::cachedCredentialsAreValid(void)
 	this->btn_conconnection.setDisabled(false);
 }
 
-bool MainWindow::handleBlihError(const json &response)
+bool MainWindow::handleBlihError(const json &response, bool quiet)
 {
 	QString str;
 
+	if (quiet)
+		return (response == nullptr || response["_STATUS_CODE"] != "200");
 	if (response == nullptr)
 		str = "Could not retrieve response from the remote server.";
 	else if (response["_STATUS_CODE"] != "200")
@@ -249,9 +253,4 @@ void MainWindow::actionRepositoryDelete(const QString &name)
 
 	list = this->lw_repositories.findItems(name, Qt::MatchExactly);
 	this->lw_repositories.takeItem(this->lw_repositories.row(list[0]));
-}
-
-void MainWindow::actionRepositoryAdd(const QString &name)
-{
-	this->lw_repositories.addItem(name);
 }

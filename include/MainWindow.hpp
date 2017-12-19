@@ -1,22 +1,17 @@
 #pragma once
 
-#include <QMainWindow>
 #include <QApplication>
+#include <QMainWindow>
 #include <QPushButton>
 #include <QLineEdit>
 #include <QFormLayout>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QGroupBox>
-#include <QMdiArea>
-#include <QTextEdit>
 #include <QCheckBox>
-#include <QDateEdit>
 #include <QLabel>
 #include <QListWidget>
 #include <QMessageBox>
-#include <map>
-#include <thread>
 
 #include "include/BlihGUI.hpp"
 #include "include/BlihAPI.hpp"
@@ -41,8 +36,7 @@ class MainWindow : public QMainWindow
 
 	private:
 	void cachedCredentialsAreValid(void);
-	bool handleBlihError(const json &response);
-	void actionRepositoryAdd(const QString &name);
+	bool handleBlihError(const json &response, bool quiet = false);
 	void actionRepositoryList(const json &response);
 	void actionRepositoryDelete(const QString &name);
 

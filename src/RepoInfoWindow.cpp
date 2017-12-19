@@ -2,7 +2,7 @@
 
 RepoInfoWindow::RepoInfoWindow(
 	const json &infoData,
-	const json &aclsData,
+	const json *aclsData,
 	const QString &repo,
 	QWidget *parent)
 	: QDialog(parent)
@@ -13,29 +13,33 @@ RepoInfoWindow::RepoInfoWindow(
 	this->lbl_description.setText(QString::fromStdString(infoData["message"]["description"]));
 	this->lbl_public.setText(QString::fromStdString(infoData["message"]["public"]));
 	this->lbl_url.setText(QString::fromStdString(infoData["message"]["url"]));
-	this->lbl_creation.setText(QString::fromStdString(infoData["message"]["creation_time"]));
+	this->setCreationTime(infoData);
 
 	/* Infos Form */
 	this->gbox_infos.setTitle("Informations");
-	this->layout_infos.addRow("UUID: ", &this->lbl_uuid);
-	this->layout_infos.addRow("Name: ", &this->lbl_name);
-	this->layout_infos.addRow("Description: ", &this->lbl_description);
-	this->layout_infos.addRow("Public: ", &this->lbl_public);
-	this->layout_infos.addRow("URL: ", &this->lbl_url);
-	this->layout_infos.addRow("Creation Date: ", &this->lbl_creation);
+	this->layout_infos.addRow("<b>UUID:</b> ", &this->lbl_uuid);
+	this->layout_infos.addRow("<b>Name:</b> ", &this->lbl_name);
+	this->layout_infos.addRow("<b>Description:</b> ", &this->lbl_description);
+	this->layout_infos.addRow("<b>Public:</b> ", &this->lbl_public);
+	this->layout_infos.addRow("<b>URL:</b> ", &this->lbl_url);
+	this->layout_infos.addRow("<b>Creation Date:</b> ", &this->lbl_creation);
 	this->gbox_infos.setLayout(&this->layout_infos);
 
 	/* ACLs */
 	QStringList columnsList;
 	columnsList << "User" << "ACL";
 	this->tree_acls.setHeaderLabels(columnsList);
-	QStringList rowList;
-	for (auto &it : json::iterator_wrapper(aclsData))
+
+	if (aclsData != NULL)
 	{
-		QTreeWidgetItem *item = new QTreeWidgetItem(&this->tree_acls);
-		item->setText(0, QString::fromStdString(it.key()));
-		item->setText(1, QString::fromStdString(it.value()));
-		this->tree_acls.addTopLevelItem(item);
+		QStringList rowList;
+		for (auto &it : json::iterator_wrapper(*aclsData))
+		{
+			QTreeWidgetItem *item = new QTreeWidgetItem(&this->tree_acls);
+			item->setText(0, QString::fromStdString(it.key()));
+			item->setText(1, QString::fromStdString(it.value()));
+			this->tree_acls.addTopLevelItem(item);
+		}
 	}
 	this->tree_acls.setRootIsDecorated(false);
 	this->tree_acls.setItemsExpandable(false);
@@ -59,5 +63,22 @@ RepoInfoWindow::RepoInfoWindow(
 
 RepoInfoWindow::~RepoInfoWindow(void)
 {
-	/* TODO: Free TreeWidget */
+	QTreeWidgetItem *item;
+	unsigned int it;
+
+	for (it = 0; ((item = this->tree_acls.takeTopLevelItem(it)) != 0); it++)
+		delete item;
+}
+
+/* --------------- PRIVATE --------------- */
+
+void RepoInfoWindow::setCreationTime(const json &infoData)
+{
+	time_t t = std::stol(infoData["message"]["creation_time"].get<std::string>());
+	char *ascTime = std::ctime(&t);
+	QString strTime;
+
+	ascTime[strlen(ascTime) - 1] = 0; // asctime appends line return
+	strTime = QString::fromLatin1(ascTime);
+	this->lbl_creation.setText(strTime);
 }
