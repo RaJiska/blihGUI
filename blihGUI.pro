@@ -39,11 +39,3 @@ HEADERS += \
 		include/RepoAddWindow.hpp \
 		include/RepoInfoWindow.hpp \
 		include/RepoSetAclWindow.hpp
-
-
-# Lib JSON
-libJSON.target = libJSON
-libJSON.commands = cp lib/json/json.hpp include/json.hpp
-
-PRE_TARGETDEPS += libJSON
-QMAKE_EXTRA_TARGETS += libJSON
