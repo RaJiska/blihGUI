@@ -56,6 +56,7 @@ MainWindow::MainWindow(void)
 	QObject::connect(&this->btn_conconnection, SIGNAL(clicked()), this, SLOT(connectToBlih()));
 	QObject::connect(&this->btn_repoadd, SIGNAL(clicked()), this, SLOT(repositoryAdd()));
 	QObject::connect(&this->btn_repodel, SIGNAL(clicked()), this, SLOT(repositoryDelete()));
+	QObject::connect(&this->btn_reposetacl, SIGNAL(clicked()), this, SLOT(repositorySetAcl()));
 	QObject::connect(&this->btn_repoinfo, SIGNAL(clicked()), this, SLOT(repositoryInfo()));
 	QObject::connect(&this->lw_repositories, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(repositoryInfo()));
 	QObject::connect(&this->lw_repositories, SIGNAL(itemSelectionChanged()), this, SLOT(repositoryItemSelected()));
@@ -184,6 +185,29 @@ void MainWindow::repositoryDelete(void)
 	response = this->blih.repositoryDelete(list[0]->text().toUtf8().constData());
 	if (!this->handleBlihError(response))
 		this->actionRepositoryDelete(list[0]->text());
+}
+
+void MainWindow::repositorySetAcl(void)
+{
+	QList <QListWidgetItem *> list;
+	QString user;
+	QString acl;
+	json response;
+
+	this->btn_reposetacl.setDisabled(true);
+	RepoSetAclWindow w(user, acl, this);
+	w.exec();
+	if (!user.trimmed().isEmpty())
+	{
+		list = this->lw_repositories.selectedItems();
+		response = this->blih.repositorySetAcl(
+			list[0]->text().toUtf8().constData(),
+			user.toUtf8().constData(),
+			acl.toUtf8().constData()
+		);
+		this->handleBlihError(response);
+	}
+	this->btn_reposetacl.setDisabled(false);
 }
 
 /* --------------- PRIVATE --------------- */

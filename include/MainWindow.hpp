@@ -17,6 +17,7 @@
 #include "include/BlihAPI.hpp"
 #include "include/RepoAddWindow.hpp"
 #include "include/RepoInfoWindow.hpp"
+#include "include/RepoSetAclWindow.hpp"
 
 class MainWindow : public QMainWindow
 {
@@ -32,6 +33,7 @@ class MainWindow : public QMainWindow
 	void repositoryItemSelected(void);
 	void repositoryAdd(void);
 	void repositoryDelete(void);
+	void repositorySetAcl(void);
 	void repositoryInfo(void);
 
 	private:

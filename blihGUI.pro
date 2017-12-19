@@ -28,7 +28,8 @@ SOURCES += \
 		src/Credentials.cpp \
 		src/MainWindow.cpp \
 		src/RepoAddWindow.cpp \
-		src/RepoInfoWindow.cpp
+		src/RepoInfoWindow.cpp \
+		src/RepoSetAclWindow.cpp
 
 HEADERS += \
 		include/BlihGUI.hpp \
@@ -36,7 +37,8 @@ HEADERS += \
 		include/Credentials.hpp \
 		include/MainWindow.hpp \
 		include/RepoAddWindow.hpp \
-		include/RepoInfoWindow.hpp
+		include/RepoInfoWindow.hpp \
+		include/RepoSetAclWindow.hpp
 
 
 # Lib JSON
