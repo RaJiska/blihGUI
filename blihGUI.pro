@@ -7,7 +7,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = blihGUI
 TEMPLATE = app
 
-QMAKE_CXXFLAGS += -std=c++11 -g3
+QMAKE_CXXFLAGS += -std=c++11 -g -Wall -Wextra
 
 LIBS = -lcurl -lcrypto
 
